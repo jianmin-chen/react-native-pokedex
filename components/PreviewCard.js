@@ -34,7 +34,8 @@ function Type({ kind }) {
 
     return (
         <View
-            style={[styles.badge, { backgroundColor: colors[kind], flex: 1 }]}>
+            style={[styles.badge, { backgroundColor: colors[kind], flex: 1 }]}
+        >
             <Text style={{ textTransform: "capitalize" }}>{kind}</Text>
         </View>
     );
@@ -50,7 +51,8 @@ export default function PreviewCard({ name, image, id }) {
                         borderWidth: 1,
                         borderColor: "#cbd5e0",
                         padding: 30,
-                    }}>
+                    }}
+                >
                     <Image
                         source={{
                             uri: image,

@@ -30,7 +30,10 @@ export default function App() {
     const [pokemonList, setPokemonList] = useState([]);
     const [pokemonPreviewData, setPokemonPreviewData] = useState([]);
     const updatePokemonPreviewData = (name, image, id) => {
-        setPokemonPreviewData(prevState => [...prevState, { name, image, id }]);
+        setPokemonPreviewData((prevState) => [
+            ...prevState,
+            { name, image, id },
+        ]);
     };
 
     useEffect(() => {
@@ -39,8 +42,8 @@ export default function App() {
         // according to https://pokeapi.co/api/v2/pokemon?limit=1
         // EXERCISE: Edit this code so the same Pokemon can't be chosen again!
         fetch(`https://pokeapi.co/api/v2/pokemon?limit=-1`)
-            .then(res => res.json())
-            .then(json => {
+            .then((res) => res.json())
+            .then((json) => {
                 // Save this data to local storage for fuzzy search feature later on
                 setPokemonList(json.results);
                 setPokemonPreviewData([]);
@@ -49,19 +52,19 @@ export default function App() {
                     const randomPokemon =
                         json.results[Math.floor(Math.random() * range)];
                     fetch(randomPokemon.url)
-                        .then(res => res.json())
-                        .then(pokemonData =>
+                        .then((res) => res.json())
+                        .then((pokemonData) =>
                             updatePokemonPreviewData(
                                 pokemonData.name,
                                 pokemonData.sprites.other["official-artwork"]
                                     .front_default,
-                                pokemonData.id
-                            )
+                                pokemonData.id,
+                            ),
                         )
-                        .catch(err => console.log(err));
+                        .catch((err) => console.log(err));
                 }
             })
-            .catch(err => console.log(err));
+            .catch((err) => console.log(err));
     }, []);
 
     useEffect(() => {
@@ -72,8 +75,8 @@ export default function App() {
                 await setPokemonPreviewData([]);
                 setError("");
                 const inp = searchInput.toLowerCase();
-                const searchResults = pokemonList.filter(pokemon =>
-                    pokemon.name.startsWith(inp)
+                const searchResults = pokemonList.filter((pokemon) =>
+                    pokemon.name.startsWith(inp),
                 );
                 if (!searchResults.length) {
                     setError("Couldn't find a matching Pokemon!");
@@ -82,16 +85,16 @@ export default function App() {
 
                 for (let pokemon of searchResults) {
                     fetch(pokemon.url)
-                        .then(res => res.json())
-                        .then(pokemonData =>
+                        .then((res) => res.json())
+                        .then((pokemonData) =>
                             updatePokemonPreviewData(
                                 pokemonData.name,
                                 pokemonData.sprites.other["official-artwork"]
                                     .front_default,
-                                pokemonData.id
-                            )
+                                pokemonData.id,
+                            ),
                         )
-                        .catch(err => console.log(err));
+                        .catch((err) => console.log(err));
                 }
             }
         }
@@ -110,7 +113,8 @@ export default function App() {
                     />
                 </View>
                 <ScrollView
-                    style={{ paddingHorizontal: 15, paddingVertical: 30 }}>
+                    style={{ paddingHorizontal: 15, paddingVertical: 30 }}
+                >
                     {error ? (
                         <Alert kind="error" content={error} />
                     ) : (
