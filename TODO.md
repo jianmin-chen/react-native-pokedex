@@ -1,0 +1,6 @@
+-   [ ] More info for navigation
+-   [ ] Flesh out workshop in README
+-   [ ] Finish app
+-   [ ] Set up Prettier for code formatting
+-   [ ] Organize and rewrite code
+-   [ ] Add GitHub branches for various milestones in the workshop
