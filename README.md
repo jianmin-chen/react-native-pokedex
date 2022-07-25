@@ -50,6 +50,8 @@ Before we get started, some prerequisites:
 -   JavaScript + hopefully React
 -   Basic knowledge of APIs - we will be using [PokeAPI](https;//pokeapi.co/)
 -   A computer (duh) and a phone or emulator to test your creation
+    -   macOS: Xcode
+    -   Windows and Linux: Android Studio
 
 That's it!
 
