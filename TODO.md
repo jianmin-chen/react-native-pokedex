@@ -1,5 +1,6 @@
 -   [ ] More info for navigation
 -   [ ] Flesh out workshop in README
+-   [ ] Add images to README
 -   [ ] Finish app
 -   [ ] Organize and rewrite code
 -   [ ] Add GitHub branches for various milestones in the workshop
