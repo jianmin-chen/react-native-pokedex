@@ -4,6 +4,8 @@ import { Text, TouchableOpacity } from "react-native";
 import Home from "./screens/Home";
 import Info from "./screens/Info";
 
+import AddRemoveFavoriteButton from "./components/AddRemoveFavoriteButton";
+
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -13,10 +15,10 @@ export default function App() {
                 <Stack.Screen
                     name="Home"
                     component={Home}
-                    options={{
+                    options={({ navigation }) => ({
                         headerRight: () => (
                             <TouchableOpacity
-                                onPress={() => console.log("TODO")}
+                                onPress={() => navigation.navigate("Favorites")}
                                 style={{ marginRight: 15 }}>
                                 <Text
                                     style={{ color: "#0099ff", fontSize: 17 }}>
@@ -24,23 +26,12 @@ export default function App() {
                                 </Text>
                             </TouchableOpacity>
                         )
-                    }}
+                    })}
                 />
                 <Stack.Screen
                     name="Info"
                     component={Info}
-                    options={{
-                        headerRight: () => (
-                            <TouchableOpacity
-                                onPress={() => console.log("TODO")}
-                                style={{ marginRight: 15 }}>
-                                <Text
-                                    style={{ color: "#0099ff", fontSize: 17 }}>
-                                    Add
-                                </Text>
-                            </TouchableOpacity>
-                        )
-                    }}
+                    options={{ headerRight: () => <AddRemoveFavoriteButton /> }}
                 />
             </Stack.Navigator>
         </NavigationContainer>
