@@ -49,8 +49,9 @@ function AddRemoveFavoriteButton() {
             }}>
             <Text
                 style={{
-                    color: "#0099ff",
-                    fontSize: 17
+                    color: "#007aff",
+                    fontSize: 17,
+                    letterSpacing: 0.35
                 }}>
                 {favorite ? "Remove" : "Add"}
             </Text>

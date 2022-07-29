@@ -59,7 +59,6 @@ export default function Home({ navigation }) {
                     randomNumber = Math.floor[Math.random() * range];
                 chosenIds.push(randomNumber);
 
-                console.log(randomNumber);
                 const randomPokemonReq = await fetch(
                     data.results[randomNumber].url
                 );
