@@ -5,7 +5,9 @@ import {
     FlatList,
     StyleSheet,
     TextInput,
-    View
+    View,
+    Text,
+    ActivityIndicator
 } from "react-native";
 import PreviewCard from "../components/PreviewCard";
 
@@ -36,10 +38,54 @@ export default function Home({ navigation }) {
 
     const [pokemonPreviewList, setPokemonPreviewList] = useState([]);
     const updatePokemonPreviewList = (name, id, image) =>
-        setPokemonPreviewList(prevState => [...prevState, { name, id, image }]);
+        setPokemonPreviewList(prevState => [{ name, id, image }, ...prevState]);
+
+    const fetchPokemonDetails = async (url, tryNum) => {
+        // give it 5 tries max
+        if (tryNum > 5) {
+            return;
+        }
+
+        console.log(`Fetching details for ${url}`);
+
+        // get the rest of the info for this pokemon
+        const randomPokemonReq = await fetch(url);
+
+        const text = await randomPokemonReq.text();
+
+        if (text.includes("Not Found")) {
+            console.log("Pokemon not found!");
+            return await fetchPokemonDetails(url, tryNum + 1);
+        }
+
+        // const randomPokemon = await randomPokemonReq.json();
+        const randomPokemon = JSON.parse(text);
+
+        const {
+            name,
+            id,
+            sprites: {
+                other: {
+                    "official-artwork": { front_default: image }
+                }
+            }
+        } = randomPokemon;
+
+        return { name: format(name), id, image };
+    };
 
     useEffect(() => {
         // Let's start by generating a random list of Pokemon!
+
+        const processListForSearch = async mainList => {
+            const pokemonList = mainList.map(pokemon => ({
+                name: format(pokemon.name),
+                url: pokemon.url
+            }));
+
+            setPokemonList(pokemonList);
+        };
+
         const generateRandomPokemonList = async () => {
             const req = await fetch(
                 "https://pokeapi.co/api/v2/pokemon?limit=-1"
@@ -47,12 +93,14 @@ export default function Home({ navigation }) {
             const data = await req.json();
 
             // Save this data for fuzzy search later on
-            setPokemonList(data.results);
+            processListForSearch(data.results);
 
             const range = data.count - 2; // -1 returns one less result than normal, so -2 is used instead of -1
             let chosenIds = [];
 
-            // generate 10 random ids
+            let promises = [];
+
+            // generate 10 random pokemon
             for (let i = 0; i < 10 && i < data.count - 1; i++) {
                 // generate a random id between 1 and the total number of pokemon
                 // that hasn't been chosen yet
@@ -61,20 +109,17 @@ export default function Home({ navigation }) {
                     randomNumber = Math.floor[Math.random() * range];
                 chosenIds.push(randomNumber);
 
-                // get the rest of the info for this pokemon
-                const randomPokemonReq = await fetch(
-                    data.results[randomNumber].url
-                );
-
-                const randomPokemon = await randomPokemonReq.json();
-
-                updatePokemonPreviewList(
-                    format(randomPokemon.name),
-                    randomPokemon.id,
-                    randomPokemon.sprites.other["official-artwork"]
-                        .front_default
+                promises.push(
+                    fetchPokemonDetails(data.results[randomNumber].url, 0)
                 );
             }
+
+            let chosenPokemon = await Promise.all(promises);
+
+            // filter empty results
+            chosenPokemon = chosenPokemon.filter(pokemon => pokemon);
+
+            setPokemonPreviewList(chosenPokemon);
         };
 
         generateRandomPokemonList();
@@ -83,37 +128,29 @@ export default function Home({ navigation }) {
     const search = async () => {
         if (searchInput) {
             // Apply basic fuzzy search
-            // EXERCISE: Research more on how to optimize this, both in terms of search algorithm, or for a more React Native based challenge, scroll-based, on-demand lazy loading!
+
             const input = searchInput.toLowerCase().trim();
 
             const results = pokemonList.filter(pokemon =>
                 pokemon.name.startsWith(input)
             );
+
             if (!results.length) {
-                Alert.alert(
-                    "Oops, there was an error!",
-                    "Couldn't find a matching Pokemon!",
-                    [
-                        {
-                            text: "OK",
-                            style: "cancel"
-                        }
-                    ]
-                );
+                setPokemonPreviewList([]);
                 return;
             }
 
-            setPokemonPreviewList([]);
+            let promises = [];
+
             for (let result of results) {
-                // Update list of preview Pokemon
-                const pokemonReq = await fetch(result.url);
-                const pokemon = await pokemonReq.json();
-                updatePokemonPreviewList(
-                    format(pokemon.name),
-                    pokemon.id,
-                    pokemon.sprites.other["official-artwork"].front_default
-                );
+                promises.push(fetchPokemonDetails(result.url, 0));
             }
+            let chosenPokemon = await Promise.all(promises);
+
+            // filter empty results
+            chosenPokemon = chosenPokemon.filter(pokemon => pokemon);
+
+            setPokemonPreviewList(chosenPokemon);
         }
     };
 
@@ -125,7 +162,8 @@ export default function Home({ navigation }) {
                     onChangeText={setSearchInput}
                     placeholder="Search for a Pokemon!"
                     style={{
-                        fontSize: 18
+                        fontSize: 18,
+                        flex: 1
                     }}
                     value={searchInput}
                 />
@@ -133,17 +171,41 @@ export default function Home({ navigation }) {
                     Search
                 </Button>
             </View>
-            <FlatList
-                data={pokemonPreviewList}
-                keyExtractor={item => item.id}
-                renderItem={({ item }) => (
-                    <PreviewCard {...item} navigation={navigation} />
-                )}
-                contentContainerStyle={{
-                    paddingTop: 30,
-                    paddingBottom: 60
-                }}
-            />
+
+            {pokemonPreviewList.length > 0 ? (
+                <FlatList
+                    data={pokemonPreviewList}
+                    keyExtractor={item => item.id}
+                    renderItem={({ item }) => (
+                        <PreviewCard {...item} navigation={navigation} />
+                    )}
+                    contentContainerStyle={{
+                        paddingTop: 30,
+                        paddingBottom: 60
+                    }}
+                />
+            ) : searchInput.length > 0 ? (
+                <View
+                    style={{
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}>
+                    <Text style={{ fontSize: 24 }}>
+                        Couldn't find a matching Pokemon!
+                    </Text>
+                </View>
+            ) : (
+                <View
+                    style={{
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}>
+                    <Text style={{ fontSize: 24 }}>Loading...</Text>
+                    <ActivityIndicator size="large" style={{ marginTop: 20 }} />
+                </View>
+            )}
         </View>
     );
 }

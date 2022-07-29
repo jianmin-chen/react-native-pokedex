@@ -22,32 +22,40 @@ export default function Favorites({ navigation }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const getFavoritesAndInfo = async () => {
-            const favoritesByID = await getFavorites();
+        const unsubscribe = navigation.addListener("focus", () => {
+            // runs when navigating forward or backward to this screen (so, when
+            // user hits `My Pokemon` and back from viewing one of their favorites)
+            const getFavoritesAndInfo = async () => {
+                const favoritesByID = await getFavorites();
 
-            let favorites = [];
+                let favorites = [];
 
-            // for each favorite, get the info and add it to the list
-            for (let i = 0; i < favoritesByID.length; i++) {
-                const req = await fetch(
-                    `https://pokeapi.co/api/v2/pokemon/${favoritesByID[i]}`
-                );
-                const data = await req.json();
+                // for each favorite, get the info and add it to the list
+                for (let i = 0; i < favoritesByID.length; i++) {
+                    const req = await fetch(
+                        `https://pokeapi.co/api/v2/pokemon/${favoritesByID[i]}`
+                    );
+                    const data = await req.json();
 
-                let pokemon = {
-                    name: data.name,
-                    id: data.id,
-                    image: data.sprites.other["official-artwork"].front_default
-                };
+                    let pokemon = {
+                        name: data.name,
+                        id: data.id,
+                        image: data.sprites.other["official-artwork"]
+                            .front_default
+                    };
 
-                favorites.push(pokemon);
-            }
+                    favorites.push(pokemon);
+                }
 
-            setFavoritesList(favorites);
-            setLoading(false);
-        };
-        getFavoritesAndInfo();
-    }, []);
+                setFavoritesList(favorites);
+                setLoading(false);
+            };
+            getFavoritesAndInfo();
+        });
+
+        // Return the function to unsubscribe from the event so it gets removed on unmount
+        return unsubscribe;
+    }, [navigation]);
 
     return (
         <View style={styles.container}>
