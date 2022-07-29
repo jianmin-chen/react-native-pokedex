@@ -47,23 +47,28 @@ export default function Home({ navigation }) {
             const data = await req.json();
 
             // Save this data for fuzzy search later on
-            await setPokemonList(data.results);
+            setPokemonList(data.results);
 
-            // Update Pokemon list
-            await setPokemonPreviewList([]);
             const range = data.count - 2; // -1 returns one less result than normal, so -2 is used instead of -1
             let chosenIds = [];
-            for (let i = 0; i < 10; i++) {
+
+            // generate 10 random ids
+            for (let i = 0; i < 10 && i < data.count - 1; i++) {
+                // generate a random id between 1 and the total number of pokemon
+                // that hasn't been chosen yet
                 let randomNumber = Math.floor(Math.random() * range);
                 while (chosenIds.includes(randomNumber))
                     randomNumber = Math.floor[Math.random() * range];
                 chosenIds.push(randomNumber);
 
+                // get the rest of the info for this pokemon
                 const randomPokemonReq = await fetch(
                     data.results[randomNumber].url
                 );
+
                 const randomPokemon = await randomPokemonReq.json();
-                await updatePokemonPreviewList(
+
+                updatePokemonPreviewList(
                     format(randomPokemon.name),
                     randomPokemon.id,
                     randomPokemon.sprites.other["official-artwork"]
@@ -98,7 +103,7 @@ export default function Home({ navigation }) {
                 return;
             }
 
-            await setPokemonPreviewList([]);
+            setPokemonPreviewList([]);
             for (let result of results) {
                 // Update list of preview Pokemon
                 const pokemonReq = await fetch(result.url);
@@ -119,7 +124,9 @@ export default function Home({ navigation }) {
                     autoCorrect={false}
                     onChangeText={setSearchInput}
                     placeholder="Search for a Pokemon!"
-                    style={{ flex: 2, fontSize: 18 }}
+                    style={{
+                        fontSize: 18
+                    }}
                     value={searchInput}
                 />
                 <Button title="Search" onPress={search}>
@@ -132,7 +139,10 @@ export default function Home({ navigation }) {
                 renderItem={({ item }) => (
                     <PreviewCard {...item} navigation={navigation} />
                 )}
-                style={{ paddingTop: 30 }}
+                contentContainerStyle={{
+                    paddingTop: 30,
+                    paddingBottom: 60
+                }}
             />
         </View>
     );

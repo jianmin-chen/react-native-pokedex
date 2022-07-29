@@ -6,7 +6,8 @@ import {
     StyleSheet,
     TextInput,
     View,
-    Text
+    Text,
+    ActivityIndicator
 } from "react-native";
 import PreviewCard from "../components/PreviewCard";
 import { getFavorites } from "../utils/favorites";
@@ -17,6 +18,8 @@ const styles = StyleSheet.create({
 
 export default function Favorites({ navigation }) {
     const [favoritesList, setFavoritesList] = useState([]);
+
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const getFavoritesAndInfo = async () => {
@@ -41,23 +44,53 @@ export default function Favorites({ navigation }) {
             }
 
             setFavoritesList(favorites);
+            setLoading(false);
         };
         getFavoritesAndInfo();
     }, []);
 
     return (
         <View style={styles.container}>
-            <FlatList
-                data={favoritesList}
-                keyExtractor={item => item.id}
-                renderItem={({ item }) => (
-                    <PreviewCard {...item} navigation={navigation} />
-                )}
-                contentContainerStyle={{
-                    paddingTop: 30,
-                    paddingBottom: 60
-                }}
-            />
+            {!loading ? (
+                favoritesList.length > 0 ? (
+                    <FlatList
+                        data={favoritesList}
+                        keyExtractor={item => item.id}
+                        renderItem={({ item }) => (
+                            <PreviewCard {...item} navigation={navigation} />
+                        )}
+                        contentContainerStyle={{
+                            paddingTop: 30,
+                            paddingBottom: 60
+                        }}
+                    />
+                ) : (
+                    <View
+                        style={{
+                            flex: 1,
+                            justifyContent: "center",
+                            alignItems: "center"
+                        }}>
+                        <Text style={{ fontSize: 24 }}>
+                            You have no favorites!
+                        </Text>
+
+                        <Text style={{ marginTop: 10, fontSize: 18 }}>
+                            Go to the Home screen and add some favorites!
+                        </Text>
+                    </View>
+                )
+            ) : (
+                <View
+                    style={{
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}>
+                    <Text style={{ fontSize: 24 }}>Loading...</Text>
+                    <ActivityIndicator size="large" style={{ marginTop: 20 }} />
+                </View>
+            )}
         </View>
     );
 }
