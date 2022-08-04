@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState, useEffect } from "react";
 import { Image, Text, StyleSheet, ScrollView, View } from "react-native";
 import cardStyles from "../components/cardStyles";

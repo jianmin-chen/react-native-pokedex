@@ -1,14 +1,10 @@
 import { useState, useEffect } from "react";
-
 import { Text, TouchableOpacity } from "react-native";
-
 import { useRoute } from "@react-navigation/native";
-
 import { addFavorite, isFavorite, removeFavorite } from "../utils/favorites";
 
-function AddRemoveFavoriteButton() {
+export default function AddRemoveFavoriteButton() {
     const route = useRoute();
-
     const [favorite, setFavorite] = useState(false);
 
     useEffect(() => {
@@ -16,26 +12,25 @@ function AddRemoveFavoriteButton() {
             params: { id }
         } = route;
 
-        // check if the pokemon is a favorite
+        // Check if the Pokemon is a favorite
         isFavorite(id).then(favorite => {
-            // if it is a favorite, set the favorite state to true
+            // If it is a favorite, set the favorite state to true
             favorite && setFavorite(true);
         });
     }, []);
 
     const toggleFavorite = () => {
-        // get the pokemon id from the route
+        // Get the Pokemon ID from the route
         const {
             params: { id }
         } = route;
 
-        // if the pokemon is a favorite, remove it from the favorites
         if (favorite) {
+            // If the Pokemon is a favorite, remove it from the favorites
             removeFavorite(id);
             setFavorite(false);
-        }
-        // otherwise, add it to the favorites
-        else {
+        } else {
+            // Otherwise, add it to favorites
             addFavorite(id);
             setFavorite(true);
         }
@@ -58,5 +53,3 @@ function AddRemoveFavoriteButton() {
         </TouchableOpacity>
     );
 }
-
-export default AddRemoveFavoriteButton;

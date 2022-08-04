@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
 import {
-    Alert,
-    Button,
+    ActivityIndicator,
     FlatList,
     StyleSheet,
-    TextInput,
-    View,
     Text,
-    ActivityIndicator
+    View
 } from "react-native";
 import PreviewCard from "../components/PreviewCard";
 import { getFavorites } from "../utils/favorites";
@@ -18,19 +15,15 @@ const styles = StyleSheet.create({
 
 export default function Favorites({ navigation }) {
     const [favoritesList, setFavoritesList] = useState([]);
-
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const unsubscribe = navigation.addListener("focus", () => {
-            // runs when navigating forward or backward to this screen (so, when
-            // user hits `My Pokemon` and back from viewing one of their favorites)
+            // Runs when navigating forward or backward to this screen
             const getFavoritesAndInfo = async () => {
                 const favoritesByID = await getFavorites();
 
                 let favorites = [];
-
-                // for each favorite, get the info and add it to the list
                 for (let i = 0; i < favoritesByID.length; i++) {
                     const req = await fetch(
                         `https://pokeapi.co/api/v2/pokemon/${favoritesByID[i]}`
@@ -43,13 +36,13 @@ export default function Favorites({ navigation }) {
                         image: data.sprites.other["official-artwork"]
                             .front_default
                     };
-
                     favorites.push(pokemon);
                 }
 
                 setFavoritesList(favorites);
                 setLoading(false);
             };
+
             getFavoritesAndInfo();
         });
 
@@ -76,14 +69,13 @@ export default function Favorites({ navigation }) {
                     <View
                         style={{
                             flex: 1,
-                            justifyContent: "center",
-                            alignItems: "center"
+                            alignItems: "center",
+                            justifyContent: "center"
                         }}>
                         <Text style={{ fontSize: 24 }}>
                             You have no favorites!
                         </Text>
-
-                        <Text style={{ marginTop: 10, fontSize: 18 }}>
+                        <Text style={{ fontSize: 18, marginTop: 10 }}>
                             Go to the Home screen and add some favorites!
                         </Text>
                     </View>
@@ -92,8 +84,8 @@ export default function Favorites({ navigation }) {
                 <View
                     style={{
                         flex: 1,
-                        justifyContent: "center",
-                        alignItems: "center"
+                        alignItems: "center",
+                        justifyContent: "center"
                     }}>
                     <Text style={{ fontSize: 24 }}>Loading...</Text>
                     <ActivityIndicator size="large" style={{ marginTop: 20 }} />
