@@ -15,13 +15,5 @@ export default StyleSheet.create({
         marginVertical: 20,
         textAlign: "center",
         textTransform: "capitalize"
-    },
-    badge: {
-        borderRadius: 5,
-        color: "white",
-        fontSize: 12,
-        fontWeight: "800",
-        marginBottom: 10,
-        padding: 8
     }
 });

@@ -4,7 +4,6 @@ import { Text, TouchableOpacity } from "react-native";
 import Home from "./screens/Home";
 import Info from "./screens/Info";
 import Favorites from "./screens/Favorites";
-
 import AddRemoveFavoriteButton from "./components/AddRemoveFavoriteButton";
 
 const Stack = createStackNavigator();

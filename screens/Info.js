@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     }
 });
 
-export default function Info({ route, navigation }) {
+export default function Info({ route }) {
     const { name, id, image } = route.params;
     const [weight, setWeight] = useState(0);
     const [height, setHeight] = useState(0);
