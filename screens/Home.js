@@ -134,9 +134,7 @@ export default function Home({ navigation }) {
                     style={{ fontSize: 18, flex: 1 }}
                     value={searchInput}
                 />
-                <Button title="Search" onPress={search}>
-                    Search
-                </Button>
+                <Button title="Search" onPress={search} />
             </View>
             {pokemonPreviewList.length > 0 ? (
                 <FlatList
@@ -147,7 +145,7 @@ export default function Home({ navigation }) {
                     )}
                     contentContainerStyle={{
                         paddingTop: 30,
-                        paddingBottom: 30
+                        paddingBottom: 60
                     }}
                 />
             ) : searchInput.length > 0 ? (
