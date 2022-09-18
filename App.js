@@ -15,7 +15,7 @@ import PreviewCard from "./components/PreviewCard";
 
 const styles = StyleSheet.create({
     AndroidSafeView: {
-        paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : 0
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
     },
     input: {
         borderBottomWidth: 1,
@@ -140,9 +140,7 @@ export default function App() {
                         style={{ fontSize: 18, flex: 1 }}
                         value={searchInput}
                     />
-                    <Button title="Search" onPress={search}>
-                        Search
-                    </Button>
+                    <Button title="Search" onPress={search} />
                 </View>
                 <View style={{ paddingBottom: 120 }}>
                     {pokemonPreviewList.length > 0 ? (
@@ -152,7 +150,7 @@ export default function App() {
                             renderItem={({ item }) => <PreviewCard {...item} />}
                             contentContainerStyle={{
                                 paddingTop: 30,
-                                paddingBottom: 30
+                                paddingBottom: 60
                             }}
                         />
                     ) : searchInput.length > 0 ? (
