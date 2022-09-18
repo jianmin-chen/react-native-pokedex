@@ -13,7 +13,7 @@ import PreviewCard from "./components/PreviewCard";
 
 const styles = StyleSheet.create({
     AndroidSafeView: {
-        paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : 0
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
     }
 });
 
@@ -96,7 +96,7 @@ export default function App() {
                         renderItem={({ item }) => <PreviewCard {...item} />}
                         contentContainerStyle={{
                             paddingTop: 30,
-                            paddingBottom: 30
+                            paddingBottom: 60
                         }}
                     />
                 ) : (
