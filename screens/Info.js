@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Image, Text, StyleSheet, ScrollView, View } from "react-native";
+import { Image, Text, ScrollView, StyleSheet, View } from "react-native";
 import cardStyles from "../components/cardStyles";
 
 const styles = StyleSheet.create({
