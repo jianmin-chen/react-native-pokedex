@@ -2,9 +2,9 @@
 
 Build a Pokedex with React Native in this workshop and learn React Native along the way!
 
-### Getting Sarted
+### Getting Started
 
-Project code is included inside the `master` branch, while workshop slides are included inside the `slides` branch. To get started, make sure you have the following:
+Project code is included inside the `master` branch, while the workshop is included in the `workshop` branch. To get started, make sure you have the following:
 
 * JavaScript and React
 * Basic knowledge of Git and GitHub
@@ -17,11 +17,11 @@ Project code is included inside the `master` branch, while workshop slides are i
         * Make sure you meet Expo's [requirements](https://docs.expo.dev/get-started/installation/) for installation
     * The Expo App, which you can find in the App Store or the Play Store
 
-`git clone` this repository and then run `npm i && npm start` to spin up an Expo demo in the `master` branch, which you can then view on your phone with the Expo app. To take a look at the slides, `git checkout` into the `slides` branch and run `npm i && npm run dev` to spin up the slides, which were created with [sli.dev](https://sli.dev). 
+`git clone` this repository and then run `npm i && npm start` to spin up an Expo demo in the `master` branch, which you can then view on your phone with the Expo app or on an emulator.
 
 If you're following along, you might like to work in terms of milestones. In that case, `git checkout` any of the following branches to follow along:
 
 * `milestone-1-preview-cards`: The first milestone, where you create preview cards for the Pokemon
 * `milestone-2-search-functionality`: The second milestone, where you add search functionality to the app
-* `milestone-3-navigation`: The third milestone, where you add navigation to the app in order to create a bigger info page.
-* `master`: The final milestone and the final project! Here, you'll set up local storage to create a Favorites screen where you can add your favorite Pokemon.branc
+* `milestone-3-navigation`: The third milestone, where you add navigation to the app to create a bigger info page.
+* `master`: The final milestone and the final project! Here, you'll set up local storage to create a Favorites screen where you can add your favorite Pokemon.
