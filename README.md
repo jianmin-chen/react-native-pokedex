@@ -951,7 +951,7 @@ Start by installing the necessary dependencies:
 
 ```bash
 npx expo install react-native-screens react-native-safe-area-context
-npm install @react-navigation/native @react-navigation/stack
+npm i @react-navigation/native @react-navigation/stack
 ```
 
 Okay, now we're ready to add navigation to our code! First up, we have to set up a navigation container that will hold all our pages. If you've used something like [`react-router`](https://reactrouter.com/en/main), this should be familiar. We should store our pages as separate components to make `App.js` easier to work with. Let's move the current app into a component we'll place inside `screens/Home.js`:
